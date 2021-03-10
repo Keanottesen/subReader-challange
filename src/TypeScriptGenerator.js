@@ -11,8 +11,20 @@ function TypeScriptGenerator() {
     name: '',
     open: false
   }])
-  const [typeText, setTypeText] = useState('')
+  
+  const _types = typeValues.map(t => t.type)
+  const startTypeText = _types.toString().replaceAll(',', '<')
+  const endTypeText = '>'.repeat(typeValues.length - 1)
 
+  useEffect(() => {
+    const indexOfFirstStringOrNumber = typeValues.findIndex(element => element.type === 'String' || element.type === 'Number')
+    if (indexOfFirstStringOrNumber !== typeValues.length - 1) {
+      const tempArr = [...typeValues]
+      tempArr.length = indexOfFirstStringOrNumber + 1
+      setTypeValues(tempArr)
+    }
+  }, [typeValues])
+  
   const onToggle = (index, event) => {
     if (event.target.className === 'dropdown-item') {
       return
@@ -37,16 +49,6 @@ function TypeScriptGenerator() {
 
     if ((chosenType === 'Array' || chosenType === 'Object')) {
       setTypeValues([...newArray, object])
-      const insertPosition = typeText.length - 1;
-      if (typeText === '') {
-        setTypeText(chosenType)
-      } else {
-        if (typeText === 'Array') {
-          setTypeText(`${typeText}<${chosenType}>`)
-        } else {
-          setTypeText([typeText.slice(0, insertPosition), `<${chosenType}>`, typeText.slice(insertPosition)].join('')) 
-        }
-      }
     } else {
       setTypeValues(newArray)
     }
@@ -86,13 +88,7 @@ function TypeScriptGenerator() {
       }
 
       <div>
-      <span>type {typeValues[0].name} = </span>
-        {typeValues.length === 1
-        ? 
-        <span>{typeValues[0].type} </span>
-        :
-        <span>{typeText} </span>
-        }
+      <span>type {typeValues[0].name} = {startTypeText + endTypeText} </span>
       </div>
     </div>
   );
