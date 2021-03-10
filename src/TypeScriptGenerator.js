@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Row } from 'reactstrap';
 
 const types = [
   'String', 'Number', 'Array', 'Object'
@@ -62,14 +62,16 @@ function TypeScriptGenerator() {
     
   return (
     <div >
+    <Row>
+      <div className="p-2">
       {typeValues.map((item, index) => (
       <div key={index}>
-          <div>
+          <Row>
             <span>Name: </span>
             <input onChange={event => onInputChange(event, index)}/>
-          </div>
-          <div>
-            <span>Type:</span>
+          </Row>
+          <Row>
+            <span>Type: </span>
             <Dropdown isOpen={item.open} toggle={(event) => onToggle(index, event)}>
               <DropdownToggle caret>
                 {item.type}
@@ -82,14 +84,15 @@ function TypeScriptGenerator() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-          </div>
+          </Row>
       </div>
       ))
       }
-
-      <div>
+      </div>
+      <div className="p-2" style={{marginLeft: 100}}>
       <span>type {typeValues[0].name} = {startTypeText + endTypeText} </span>
       </div>
+    </Row>
     </div>
   );
 }
